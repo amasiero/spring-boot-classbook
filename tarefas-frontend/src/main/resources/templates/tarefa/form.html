@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Tarefas</title>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/webjars/font-awesome/css/font-awesome.min.css}" rel="stylesheet" />
+    <link th:href="@{/styles/main.css}" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-2">
+        <header class="jumbotron">
+            <h1>Tarefas</h1>
+        </header>
+
+        <div class="alert alert-success"
+            th:if="${msg != null}" th:text="${msg}"></div>
+
+        <form th:action="@{/tarefa/cadastrar}" method="post">
+            <div class="form-group mt-5">
+                <label for="descricao">Descrição</label>
+                <input class="form-control" type="text" id="descricao"
+                       name="descricao" placeholder="Digite sua tarefa" />
+            </div>
+            <button class="btn btn-primary" type="submit">Adicionar</button>
+        </form>
+
+        <hr/>
+        <h2>Lista das tarefas</h2>
+        <ul class="list-group mt-3">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                th:each="tarefa:${tarefas}">
+                <p th:text="${tarefa.descricao}" th:class="${tarefa.feita ? 'done' : ''}"></p>
+                <div>
+                    <a th:if="${!tarefa.feita}" th:href="@{/tarefa/feita/} + ${tarefa.codigo}"
+                       class="btn btn-success mr-2">
+                        <i class="fa fa-check"></i>
+                    </a>
+                    <button th:onclick="|tarefaId.value = ${tarefa.codigo}|" type="button" class="btn btn-danger"
+                        data-toggle="modal" data-target="#modal">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Deseja confirmar a exclusão da tarefa?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/tarefa/excluir}" method="post">
+                        <input type="hidden" name="codigo" id="tarefaId">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Confirmar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light fixed-bottom p-4">
+        <div class="d-flex justify-content-center">
+            Developed with <span class="text-danger mr-2 ml-2 font-weight-bold">&hearts;</span> by Andrey Masiero &copy; 2020
+        </div>
+    </footer>
+
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Tarefas</title>
+</head>
+<body>
+    <form action="/tarefa/cadastrar" method="post">
+        <input type="text" name="descricao" placeholder="Digite sua tarefa" />
+        <button type="submit">Adicionar</button>
+    </form>
+
+    <ul>
+        <li th:each="tarefa:${tarefas}" th:text="${tarefa.descricao}"></li>
+    </ul>
+</body>
+</html>
